@@ -88,6 +88,10 @@ namespace FileWatch
                         Directory.CreateDirectory(newDic);
                     }
                     newFilePath = newDic + "\\" + fileName;
+                    if(File.Exists(newFilePath))
+                    {
+                        File.Delete(filePath);
+                    }
                     File.Move(filePath, newFilePath);
                     WriteMsg("移动成功:" + DateTime.Now.ToString("HH:mm:ss") + "(" + newFilePath + ")", ConsoleColor.Green);
 
