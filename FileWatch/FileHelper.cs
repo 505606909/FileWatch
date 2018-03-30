@@ -41,7 +41,6 @@ namespace FileWatch
         {
             if (Files.Contains(e.FullPath))
             {
-                WriteMsg("文件更改:" + DateTime.Now.ToString("HH:mm:ss") + "(" + e.FullPath + ")", ConsoleColor.Yellow);
                 System.Threading.Thread.Sleep(5*1000);//休眠5000秒
                 CopyFile(e.FullPath);
             }
@@ -60,26 +59,45 @@ namespace FileWatch
         /// </summary>
         public void CopyFile(string filePath)
         {
-            try
+            if(Directory.Exists(filePath))
             {
-                string  newFilePath = filePath.Replace(FromPath, ToPath);
-                string[] fileArr = newFilePath.Split('\\');
-                string fileName = fileArr[fileArr.Length - 1];
-                fileArr[fileArr.Length - 1] = DateTime.Now.ToString("yyyy-MM-dd");
-                string newDic=string.Join("\\",fileArr);
-                if(!Directory.Exists(newDic))
+                DirectoryInfo di=new DirectoryInfo(filePath);
+                var dirs = di.GetDirectories();
+                foreach (DirectoryInfo dir in dirs)
                 {
-                    Directory.CreateDirectory(newDic);
+                    CopyFile(dir.FullName);
                 }
-                newFilePath = newDic + "\\" + fileName;
-                File.Move(filePath, newFilePath);
-                WriteMsg("移动成功:" + DateTime.Now.ToString("HH:mm:ss") + "(" + newFilePath + ")", ConsoleColor.Green);
-
+                var files = di.GetFiles();
+                foreach (var file in files)
+                {
+                    CopyFile(file.FullName);
+                }
             }
-            catch (Exception e)
+            else if (File.Exists(filePath))
             {
-                WriteMsg("移动失败:" + DateTime.Now.ToString("HH:mm:ss") + "(" + filePath + ")"+e.Message, ConsoleColor.Red);
+                try
+                {
+
+                    string newFilePath = filePath.Replace(FromPath, ToPath);
+                    string[] fileArr = newFilePath.Split('\\');
+                    string fileName = fileArr[fileArr.Length - 1];
+                    fileArr[fileArr.Length - 1] = DateTime.Now.ToString("yyyy-MM-dd");
+                    string newDic = string.Join("\\", fileArr);
+                    if (!Directory.Exists(newDic))
+                    {
+                        Directory.CreateDirectory(newDic);
+                    }
+                    newFilePath = newDic + "\\" + fileName;
+                    File.Move(filePath, newFilePath);
+                    WriteMsg("移动成功:" + DateTime.Now.ToString("HH:mm:ss") + "(" + newFilePath + ")", ConsoleColor.Green);
+
+                }
+                catch (Exception e)
+                {
+                    WriteMsg("移动失败:" + DateTime.Now.ToString("HH:mm:ss") + "(" + filePath + ")" + e.Message, ConsoleColor.Red);
+                }
             }
+            
             
         }
 
