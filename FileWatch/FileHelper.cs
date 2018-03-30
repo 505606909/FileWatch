@@ -85,6 +85,8 @@ namespace FileWatch
 
         #endregion
 
+        #region 打印消息
+
         public static void WriteMsg(string msg,ConsoleColor color= ConsoleColor.White)
         {
             var oldColor = Console.ForegroundColor;
@@ -92,5 +94,7 @@ namespace FileWatch
             Console.WriteLine(msg);
             Console.ForegroundColor = oldColor;
         }
+
+        #endregion
     }
 }
