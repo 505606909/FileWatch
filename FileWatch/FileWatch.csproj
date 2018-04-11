@@ -42,7 +42,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FileHelper.cs" />
+    <Compile Include="FileWarchB.cs" />
+    <Compile Include="FileWatchBase.cs" />
+    <Compile Include="FileWarchA.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
